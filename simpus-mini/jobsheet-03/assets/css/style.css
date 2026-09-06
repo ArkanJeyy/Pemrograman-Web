@@ -1,4 +1,8 @@
-/* ===== Reset & Base ===== */
+/* =========================================================
+   1. BASE STYLES & MOBILE DEFAULT (Layar Kecil / < 480px)
+   ========================================================= */
+
+/* Reset & Base */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -21,7 +25,7 @@ a:hover {
     text-decoration: underline;
 }
 
-/* ===== Header & Navbar (Flexbox) ===== */
+/* Header & Nav (Tampilan Default Mobile) */
 header {
     background-color: #224834;
     color: #fff;
@@ -30,16 +34,43 @@ header {
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    position: relative;
 }
 
 header h1 {
     font-size: 1.4rem;
+    order: 1;
+}
+
+/* Hamburger Menu Toggle (Mobile) */
+.nav-toggle {
+    display: none;
+}
+
+.nav-toggle-label {
+    display: block;
+    font-size: 1.6rem;
+    color: #fff;
+    cursor: pointer;
+    order: 2;
+}
+
+header nav {
+    display: none;
+    width: 100%;
+    order: 3;
+    margin-top: 1rem;
+}
+
+.nav-toggle:checked ~ nav {
+    display: block;
 }
 
 header nav ul {
     list-style: none;
     display: flex;
-    gap: 1.25rem;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 header nav a {
@@ -47,18 +78,17 @@ header nav a {
     font-weight: 500;
 }
 
-/* ===== Main Layout ===== */
+/* Main Layout (Mobile Default) */
 main {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
     width: 100%;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
 }
 
 section {
     background-color: #fff;
     border-radius: 8px;
-    padding: 1.5rem;
+    padding: 1.25rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     width: 100%;
@@ -70,10 +100,10 @@ section h2 {
     color: #224834;
 }
 
-/* ===== Kartu Statistik (CSS Grid) ===== */
+/* Kartu Statistik (1 Kolom di Mobile) */
 main section:nth-of-type(2) {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
     gap: 1rem;
 }
 
@@ -96,7 +126,49 @@ main section:nth-of-type(2) article p {
     color: #224834;
 }
 
-/* ===== Tabel ===== */
+/* Form (Mobile Default) */
+form p {
+    margin-bottom: 1rem;
+}
+
+form label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+    color: #444;
+}
+
+form input,
+form select {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #cdd4da;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+form button[type="submit"] {
+    background-color: #224834;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+form button[type="submit"]:hover {
+    background-color: #164869;
+}
+
+/* Tabel & Penampung Responsif */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -142,58 +214,16 @@ td button {
     font-size: 0.85rem;
 }
 
-td button.btn-edit {
-    background-color: #f0ad4e;
-    color: #fff;
+td button.btn-edit { background-color: #f0ad4e; color: #fff; }
+td button.btn-detail { background-color: #19a1cf; color: #fff; }
+td button.btn-delete { background-color: #d9534f; color: #fff; }
+
+pre {
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
-td button.btn-detail {
-    background-color: #19a1cf;
-    color: #fff;
-}
-
-td button.btn-delete {
-    background-color: #d9534f;
-    color: #fff;
-}
-
-/* ===== Form ===== */
-form p {
-    margin-bottom: 1rem;
-}
-
-form label {
-    display: block;
-    margin-bottom: 0.35rem;
-    font-weight: 600;
-    color: #444;
-}
-
-form input,
-form select {
-    width: 100%;
-    max-width: 400px;
-    padding: 0.55rem 0.7rem;
-    border: 1px solid #cdd4da;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-form button[type="submit"] {
-    background-color: #224834;
-    color: #fff;
-    border: none;
-    padding: 0.6rem 1.5rem;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-form button[type="submit"]:hover {
-    background-color: #164869;
-}
-
-/* ===== Footer ===== */
+/* Footer */
 footer {
     text-align: center;
     padding: 1.25rem;
@@ -201,71 +231,71 @@ footer {
     font-size: 0.9rem;
 }
 
-/* ===== Tabel Responsif ===== */
-.table-responsive {
-    overflow-x: auto;
-}
 
-/* ===== Hamburger Menu (checkbox hack) ===== */
-.nav-toggle {
-    display: none;
-}
-
-.nav-toggle-label {
-    display: none;
-    font-size: 1.6rem;
-    color: #fff;
-    cursor: pointer;
-}
-
-/* ===== Responsive Breakpoints ===== */
-
-@media (max-width: 1400px){
-    main{
-        max-width: 1280px;
-    }
-}
-
-/* Tablet ke bawah */
-@media (max-width: 900px) {
+/* =========================================================
+   2. TABLET BREAKPOINT (min-width: 481px)
+   ========================================================= */
+@media (min-width: 481px) {
+    /* Kartu Statistik Menjadi 2 Kolom */
     main section:nth-of-type(2) {
         grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Mobile */
-@media (max-width: 480px) {
-    header {
-        position: relative;
-    }
-
-    .nav-toggle-label {
-        display: block;
-    }
-
-    header nav {
-        display: none;
-        width: 100%;
-        order: 3;
-        margin-top: 1rem;
-    }
-
-    .nav-toggle:checked ~ nav {
-        display: block;
-    }
-
-    header nav ul {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    main section:nth-of-type(2) {
-        grid-template-columns: 1fr;
     }
 
     form input,
     form select {
-        max-width: 100%;
+        max-width: 400px;
+    }
+
+    form button[type="submit"] {
+        width: auto;
     }
 }
 
+
+/* =========================================================
+   3. DESKTOP BREAKPOINT (min-width: 769px)
+   ========================================================= */
+@media (min-width: 769px) {
+    /* Sembunyikan Tombol Hamburger */
+    .nav-toggle-label {
+        display: none;
+    }
+
+    /* Kembalikan Navigasi Horizontal */
+    header nav {
+        display: block !important;
+        width: auto;
+        order: unset;
+        margin-top: 0;
+    }
+
+    header nav ul {
+        flex-direction: row;
+        gap: 1.25rem;
+    }
+
+    /* Kartu Statistik Menjadi 4 Kolom */
+    main section:nth-of-type(2) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    main {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+    }
+
+    section {
+        padding: 1.5rem;
+    }
+}
+
+
+/* =========================================================
+   4. LARGE DESKTOP BREAKPOINT (min-width: 1400px)
+   ========================================================= */
+@media (min-width: 1400px) {
+    main {
+        max-width: 1280px;
+    }
+}
