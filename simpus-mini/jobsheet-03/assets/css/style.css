@@ -62,7 +62,6 @@ section {
   margin-bottom: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   width: 100%;
-  overflow: hidden;
 }
 
 section h2 {
@@ -252,7 +251,7 @@ footer {
     margin-top: 1rem;
   }
 
-  .nav-toggle:checked nav {
+  .nav-toggle:checked ~ nav {
     display: block;
   }
 
