@@ -222,11 +222,35 @@ footer {
   display: none;
 }
 
+/* ===== Hamburger Menu (JS-driven) ===== */
 .nav-toggle-label {
-  display: none;
-  font-size: 1.6rem;
-  color: #fff;
-  cursor: pointer;
+    display: none;
+    font-size: 1.6rem;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* ===== Pesan Error Validasi ===== */
+.error {
+    display: block;
+    color: #d9534f;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+/* ===== Kolom Pencarian ===== */
+.search-box {
+    margin-bottom: 1rem;
+}
+
+.search-box input {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #b9bec3;
+    border-radius: 4px;
 }
 
 /* ===== Responsive Breakpoints ===== */
