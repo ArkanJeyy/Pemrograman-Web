@@ -46,7 +46,13 @@
           </p>
           <p>
             <label for="isbn">ISBN</label><br />
-            <input type="text" id="isbn" name="isbn" />
+            <input
+              type="text"
+              id="isbn"
+              name="isbn"
+              pattern="^[0-9\-]+$"
+              required
+            />
           </p>
           <p>
             <label for="stok">Stok</label><br />
