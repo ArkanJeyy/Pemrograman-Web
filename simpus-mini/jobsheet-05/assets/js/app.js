@@ -11,7 +11,7 @@ function initNavToggle() {
 
 // ===== Konfirmasi hapus (front-end only, belum ke server) =====
 function initHapusConfirm() {
-    document.querySelectorAll(".btn-hapus").forEach(function (btn) {
+    document.querySelectorAll(".btn-delete").forEach(function (btn) {
         btn.addEventListener("click", function () {
             const row = btn.closest("tr");
             const nama = row ? row.querySelector("td")?.textContent : "data ini";
