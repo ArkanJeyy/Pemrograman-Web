@@ -23,40 +23,89 @@ Halaman yang sudah ada (Beranda, Daftar/Tambah Buku, Daftar/Tambah Anggota — J
         -> [Tandai "Dikembalikan"] -> [Stok buku bertambah 1]
         -> [Kembali ke Dashboard]
 ```
+## User Flow — Peminjaman Jatuh Tempo
 
-## Wireframe: Halaman Login
+```
+[Petugas Login] -> [Dashboard/Beranda] -> [Pilih menu "Daftar Anggota"] 
+                -> [Pilih Filter "Jatuh Tempo / Menunggak"] -> [Tampilkan Daftar Anggota Menunggak] 
+                -> [Pilih Anggota] -> [Lihat Detail Buku Terlambat & Denda] -> [Selesai]
+```
+
+## Wireframe: Halaman Login Petugas
 
 ```
 +--------------------------------------+
 |              SIMPUS-Mini             |
 |--------------------------------------|
 |                                      |
-|        [ Login Petugas ]            |
+|        [ Login Petugas ]             |
 |                                      |
-|   Username : [______________]       |
-|   Password : [______________]       |
+|   Username : [______________]        |
+|   Password : [______________]        |
 |                                      |
-|          [   Masuk   ]              |
+|          [   Masuk   ]               |
 |                                      |
-|   Belum punya akun? Daftar di sini  |
+|   Belum punya akun? Daftar di sini   |
 +--------------------------------------+
 ```
 
 ## Wireframe: Dashboard Petugas
 
 ```
-+-----------------------------------------------------+
++--------------------------------------------------------------------------------+
 | SIMPUS-Mini      Beranda | Buku | Anggota | Peminjaman | (Nama Petugas) Logout |
-|-------------------------------------------------------|
-|  [Total Buku]   [Total Anggota]   [Sedang Dipinjam]    |
-|                                                         |
-|  Aksi Cepat:                                           |
-|  [ + Peminjaman Baru ]   [ + Pengembalian ]            |
-|                                                         |
-|  Transaksi Terbaru                                     |
-|  --------------------------------------------------    |
-|  Anggota | Buku | Tgl Pinjam | Status                  |
-+-----------------------------------------------------+
+|--------------------------------------------------------------------------------|
+|  [Total Buku]   [Total Anggota]   [Sedang Dipinjam]                            |
+|                                                                                |
+|  Aksi Cepat:                                                                   |
+|  [ + Peminjaman Baru ]   [ + Pengembalian ]                                    |
+|                                                                                |
+|  Transaksi Terbaru                                                             |
+|  ------------------------------------------------------------------------------|
+|  Anggota | Buku | Tgl Pinjam | Status                                          |
++--------------------------------------------------------------------------------+
+```
+
+## Wireframe: Halaman Login Tamu
+
+```
++--------------------------------------+
+|              SIMPUS-Mini             |
+|--------------------------------------|
+|                                      |
+|            [ Login Tamu ]            |
+|                                      |
+|   Username : [______________]        |
+|   Password : [______________]        |
+|                                      |
+|          [   Masuk   ]               |
+|                                      |
+|   Belum punya akun? Daftar di sini   |
++--------------------------------------+
+```
+## Wireframe: Dashboard Tamu
+
+```
++-----------------------------------------------------------------------+
+| SIMPUS-Mini                                                    [=]    |
+| [ Beranda ] [ Daftar Buku ] [ Tambah Buku ] [ Daftar Anggota ]        |
++-----------------------------------------------------------------------+
+|                                                                       |
+|  REGISTRASI ANGGOTA BARU                                              |
+|                                                                       |
+|  Isi formulir di bawah ini untuk mendaftar sebagai anggota baru:      |
+|                                                                       |
+|  Nama Lengkap : [__________________________________________________]  |
+|  Email        : [__________________________________________________]  |
+|  Nomor Telepon: [__________________________________________________]  |
+|  Alamat       : [__________________________________________________]  |
+|                 [__________________________________________________]  |
+|                                                                       |
+|  [ DAFTAR SEKARANG ]   [ BATAL ]                                      |
+|                                                                       |
++-----------------------------------------------------------------------+
+| © 2026 SIMPUS-Mini — Jobsheet 3                                       |
++-----------------------------------------------------------------------+
 ```
 
 ## Wireframe: Form Peminjaman
@@ -69,7 +118,7 @@ Halaman yang sudah ada (Beranda, Daftar/Tambah Buku, Daftar/Tambah Anggota — J
 |  Buku    : [ dropdown, hanya stok>0 ]|
 |  Tanggal Pinjam : [ auto: hari ini ] |
 |                                      |
-|          [  Simpan Peminjaman  ]    |
+|       [  Simpan Peminjaman  ]        |
 +--------------------------------------+
 ```
 
