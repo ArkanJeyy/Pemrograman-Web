@@ -26,19 +26,35 @@ function initHapusConfirm() {
 // ===== Filter/pencarian tabel real-time =====
 function initTableFilter() {
     const input = document.getElementById("search-input");
-    const table = document.querySelector(".table-responsive table");
-    if (!input || !table) return;
+    // Mencari tabel di halaman
+    const table = document.querySelector("table"); 
+    
+    if (!input || !table) {
+        console.log("Input atau tabel tidak ditemukan!");
+        return;
+    }
 
     input.addEventListener("keyup", function () {
-        const keyword = input.value.toLowerCase();
+        const keyword = input.value.toLowerCase().trim();
         const rows = table.querySelectorAll("tbody tr");
+
         rows.forEach(function (row) {
-            const teks = row.textContent.toLowerCase();
-            row.style.display = teks.includes(keyword) ? "" : "none";
+            // Ambil kolom pertama (td index 0) yang berisi Judul Buku
+            const kolomJudul = row.querySelector("td");
+            
+            if (kolomJudul) {
+                const teksJudul = kolomJudul.textContent.toLowerCase().trim();
+                
+                // Jika kata kunci cocok, tampilkan baris. Jika tidak, sembunyikan.
+                if (teksJudul.includes(keyword)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
         });
     });
 }
-
 // ===== Validasi form (client-side) =====
 function tampilkanError(input, pesan) {
     hapusError(input);
