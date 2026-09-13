@@ -9,6 +9,24 @@ function initNavToggle() {
     });
 }
 
+function updateCounter() {
+    const table = document.querySelector("table");
+    const counterElement = document.getElementById("counter-buku");
+    if (!table || !counterElement) return;
+
+    const allRows = table.querySelectorAll("tbody tr");
+    const totalBuku = allRows.length;
+
+    let visibleCount = 0;
+    allRows.forEach(function (row) {
+        if (row.style.display !== "none") {
+            visibleCount++;
+        }
+    });
+
+    counterElement.textContent = `Menampilkan ${visibleCount} dari ${totalBuku} buku`;
+}
+
 // ===== Konfirmasi hapus (front-end only, belum ke server) =====
 function initHapusConfirm() {
     document.querySelectorAll(".btn-delete").forEach(function (btn) {
@@ -18,6 +36,7 @@ function initHapusConfirm() {
             const yakin = confirm("Yakin ingin menghapus \"" + nama + "\"?");
             if (yakin && row) {
                 row.remove();
+                updateCounter();
             }
         });
     });
@@ -44,8 +63,6 @@ function initTableFilter() {
             
             if (kolomJudul) {
                 const teksJudul = kolomJudul.textContent.toLowerCase().trim();
-                
-                // Jika kata kunci cocok, tampilkan baris. Jika tidak, sembunyikan.
                 if (teksJudul.includes(keyword)) {
                     row.style.display = "";
                 } else {
@@ -53,6 +70,7 @@ function initTableFilter() {
                 }
             }
         });
+        updateCounter();
     });
 }
 // ===== Validasi form (client-side) =====
@@ -78,13 +96,13 @@ function initValidasiForm() {
     form.addEventListener("submit", function (e) {
         let valid = true;
 
-        const judul = form.querySelector("[name='judul'], [name='nama']");
-        if (judul && judul.value.trim() === "") {
-            tampilkanError(judul, "Field ini wajib diisi.");
-            valid = false;
-        } else if (judul) {
-            hapusError(judul);
-        }
+        const fieldsWajib = [
+            { name: "judul", label: "Judul" },
+            { name: "pengarang", label: "Pengarang" },
+            { name: "tahun", label: "Tahun Terbit" },
+            { name: "isbn", label: "ISBN" },
+            { name: "stok", label: "Stok" }
+        ];
 
         const pengarang = form.querySelector("[name='pengarang']");
         if (pengarang && pengarang.value.trim() === "") {
@@ -95,27 +113,32 @@ function initValidasiForm() {
         }
 
         const tahun = form.querySelector("[name='tahun']");
-        if (tahun) {
+        if (tahun && tahun.value.trim() !== "") {
             const nilai = parseInt(tahun.value, 10);
             if (isNaN(nilai) || nilai < 1900 || nilai > 2026) {
                 tampilkanError(tahun, "Tahun harus di antara 1900-2026.");
                 valid = false;
-            } else {
-                hapusError(tahun);
             }
         }
 
-        const stok = form.querySelector("[name='stok']");
-        if (stok) {
+        const isbn = form.querySelector("[name='isbn']");
+        if (isbn && isbn.value.trim() !== "") {
+            const isbnRegex = /^[0-9\-]+$/;
+            if (!isbnRegex.test(isbn.value.trim())) {
+                tampilkanError(isbn, "ISBN hanya boleh berisi angka dan tanda hubung (-).");
+                valid = false;
+            }
+        }
+
+       const stok = form.querySelector("[name='stok']");
+        if (stok && stok.value.trim() !== "") {
             const nilai = parseInt(stok.value, 10);
             if (isNaN(nilai) || nilai < 0) {
                 tampilkanError(stok, "Stok tidak boleh negatif.");
                 valid = false;
-            } else {
-                hapusError(stok);
             }
         }
-
+        
         if (!valid) {
             e.preventDefault();
         }
@@ -127,4 +150,5 @@ document.addEventListener("DOMContentLoaded", function () {
     initHapusConfirm();
     initTableFilter();
     initValidasiForm();
+    updateCounter();
 });
