@@ -1,6 +1,6 @@
 // ===== Hamburger menu (JS-driven, menggantikan checkbox hack) =====
 function initNavToggle() {
-    const toggleBtn = document.getElementById("nav-toggle-btn");
+    const toggleBtn = document.getElementById("nav-toggle-btn") || document.querySelector(".nav-toggle-label");
     const nav = document.querySelector("header nav");
     if (!toggleBtn || !nav) return;
 
@@ -30,7 +30,7 @@ function updateCounter() {
 // ===== Konfirmasi hapus (front-end only, belum ke server) =====
 function initHapusConfirm() {
     document.addEventListener("click", function (e) {
-        const btn = e.target.closest(".btn-hapus");
+        const btn = e.target.closest(".btn-hapus, .btn-delete");
         if (!btn) return;
 
         const row = btn.closest("tr");
@@ -38,6 +38,7 @@ function initHapusConfirm() {
         const yakin = confirm("Yakin ingin menghapus \"" + nama + "\"?");
         if (yakin && row) {
             row.remove();
+            updateCounter();
         }
     });
 }
@@ -45,7 +46,6 @@ function initHapusConfirm() {
 // ===== Filter/pencarian tabel real-time =====
 function initTableFilter() {
     const input = document.getElementById("search-input");
-    // Mencari tabel di halaman
     const table = document.querySelector("table"); 
     
     if (!input || !table) {
@@ -58,9 +58,7 @@ function initTableFilter() {
         const rows = table.querySelectorAll("tbody tr");
 
         rows.forEach(function (row) {
-            // Ambil kolom pertama (td index 0) yang berisi Judul Buku
             const kolomJudul = row.querySelector("td");
-            
             if (kolomJudul) {
                 const teksJudul = kolomJudul.textContent.toLowerCase().trim();
                 if (teksJudul.includes(keyword)) {
@@ -104,13 +102,17 @@ function initValidasiForm() {
             { name: "stok", label: "Stok" }
         ];
 
-        const pengarang = form.querySelector("[name='pengarang']");
-        if (pengarang && pengarang.value.trim() === "") {
-            tampilkanError(pengarang, "Pengarang wajib diisi.");
-            valid = false;
-        } else if (pengarang) {
-            hapusError(pengarang);
-        }
+        fieldsWajib.forEach(function (field) {
+            const input = form.querySelector(`[name='${field.name}']`);
+            if (input) {
+                if (input.value.trim() === "") {
+                    tampilkanError(input, `${field.label} wajib diisi.`);
+                    valid = false;
+                } else {
+                    hapusError(input);
+                }
+            }
+        });
 
         const tahun = form.querySelector("[name='tahun']");
         if (tahun && tahun.value.trim() !== "") {
@@ -143,6 +145,51 @@ function initValidasiForm() {
             e.preventDefault();
         }
     });
+}
+
+async function muatDataTabel(urlJson, keys) {
+    const tbody = document.querySelector(".table-responsive table tbody");
+    const loading = document.getElementById("loading-indicator");
+    if (!tbody) return;
+
+    if (loading) loading.style.display = "block";
+    tbody.innerHTML = "";
+
+    try {
+        await new Promise((resolve) => setTimeout(resolve, 600));
+
+        const res = await fetch(urlJson);
+        if (!res.ok) {
+            throw new Error("Gagal mengambil data (status " + res.status + ")");
+        }
+        const dataList = await res.json();
+
+        dataList.forEach(function (item) {
+            const tr = document.createElement("tr");
+            let rowHtml = "";
+
+            keys.forEach(function (key) {
+                rowHtml += "<td>" + (item[key] !== undefined ? item[key] : "-") + "</td>";
+            });
+
+            rowHtml += "<td>" +
+                "<button type=\"button\" class=\"btn-edit\">Edit</button> " +
+                "<button type=\"button\" class=\"btn-detail\">Detail</button> " +
+                "<button type=\"button\" class=\"btn-delete\">Hapus</button>" +
+                "</td>";
+
+            tr.innerHTML = rowHtml;
+            tbody.appendChild(tr);
+        });
+
+        updateCounter();
+
+    } catch (err) {
+        const totalKolom = keys.length + 1;
+        tbody.innerHTML = `<tr><td colspan="${totalKolom}">Gagal memuat data: ${err.message}</td></tr>`;
+    } finally {
+        if (loading) loading.style.display = "none";
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
