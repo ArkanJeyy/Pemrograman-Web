@@ -1,15 +1,15 @@
-# Jobsheet 2 — CSS3 Styling Dasar
+# Jobsheet 3 — Responsive Design
 
-Sub-CPMK: Mengimplementasikan styling dasar dengan CSS3.
+Sub-CPMK: Membangun tampilan responsif.
 
-## Perubahan dari Jobsheet 1
-- Tambah `assets/css/style.css` (box model, Flexbox untuk navbar, CSS Grid untuk kartu statistik Beranda).
-- Semua halaman `.html` ditambahkan `<link rel="stylesheet">` ke `style.css` (path relatif menyesuaikan kedalaman folder).
-- Struktur HTML **tidak diubah** — hanya tampilan.
+## Perubahan dari Jobsheet 2
+- Tambah `<meta name="viewport">` di semua halaman.
+- Navbar: hamburger menu memakai teknik **checkbox hack** murni CSS (`input[type=checkbox] + label`), aktif di layar ≤480px.
+- Tabel dibungkus `<div class="table-responsive">` agar bisa di-scroll horizontal di layar sempit.
+- Tambah media query di `style.css`: grid kartu statistik 3 → 2 → 1 kolom mengikuti breakpoint tablet/mobile.
 
 ## Cara menjalankan
-Buka `index.html` langsung di browser.
+Buka `index.html` di browser, uji dengan DevTools responsive mode pada 3 breakpoint (mobile ≤480px, tablet ~768px, desktop ≥1024px).
 
 ## Catatan
-- Kartu statistik di Beranda memakai `main section:nth-of-type(2)` sebagai grid 3 kolom.
-- Class CSS bersifat generik (berbasis tag semantic + `nth-child`) agar bisa dipakai ulang di halaman Anggota tanpa duplikasi class.
+- Hamburger di jobsheet ini masih murni CSS (checkbox hack). Di Jobsheet 5 akan diganti dengan toggle berbasis JavaScript.
