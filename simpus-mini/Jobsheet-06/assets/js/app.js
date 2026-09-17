@@ -27,22 +27,25 @@ function updateCounter() {
     counterElement.textContent = `Menampilkan ${visibleCount} dari ${totalBuku} buku`;
 }
 
-// ===== Konfirmasi hapus (front-end only, belum ke server) =====
+// ===== Konfirmasi Hapus (Event Delegation dengan Log Debugging) =====
 function initHapusConfirm() {
     document.addEventListener("click", function (e) {
+        console.log("Elemen yang sedang diklik : ", e.target);
         const btn = e.target.closest(".btn-hapus, .btn-delete");
         if (!btn) return;
-
         const row = btn.closest("tr");
-        const nama = row ? row.querySelector("td")?.textContent : "data ini";
+        const namaCell = row ? (row.cells[1] || row.querySelector("td")) : null;
+        const nama = namaCell ? namaCell.textContent.trim() : "data ini";
+
         const yakin = confirm("Yakin ingin menghapus \"" + nama + "\"?");
         if (yakin && row) {
             row.remove();
-            updateCounter();
+            if (typeof updateCounter === "function") {
+                updateCounter();
+            }
         }
     });
 }
-
 // ===== Filter/pencarian tabel real-time =====
 function initTableFilter() {
     const input = document.getElementById("search-input");
