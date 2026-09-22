@@ -65,10 +65,10 @@ $daftarAnggota = $_SESSION['anggota'] ?? [];
                             <td><?php echo htmlspecialchars($anggota['tgl_bergabung'] ?? '-'); ?></td>
                             <td>
                                 <a href="edit.php?id=<?php echo urlencode($anggota['no_anggota'] ?? $index); ?>">
-                                    <button type="button">Edit</button>
+                                    <button type="button" class="btn-edit">Edit</button>
                                 </a>
                                 <a href="proses_hapus.php?id=<?php echo urlencode($anggota['no_anggota'] ?? $index); ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                    <button type="button" class="btn-hapus">Hapus</button>
+                                    <button type="button" class="btn-delete">Hapus</button>
                                 </a>
                             </td>
                         </tr>

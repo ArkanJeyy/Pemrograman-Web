@@ -66,7 +66,7 @@ $daftarBuku = $_SESSION['buku'] ?? [];
                                     <button type="button" class="btn-edit">Edit</button>
                                 </a>
                                 <a href="proses_hapus.php?id=<?php echo urlencode($index); ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
-                                    <button type="button" class="btn-hapus">Hapus</button>
+                                    <button type="button" class="btn-delete">Hapus</button>
                                 </a>
                             </td>
                         </tr>
