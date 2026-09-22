@@ -4,6 +4,8 @@ session_start();
 $nama = trim($_POST['nama'] ?? '');
 $noAnggota = trim($_POST['no_anggota'] ?? '');
 $alamat = trim($_POST['alamat'] ?? '');
+$tglBergabung = trim($_POST['tgl_bergabung'] ?? '');
+$email = trim($_POST['email'] ?? '');
 $noHp = trim($_POST['no_hp'] ?? '');
 
 $errors = [];
@@ -28,6 +30,8 @@ $_SESSION['anggota'][] = [
     'nama' => $nama,
     'no_anggota' => $noAnggota,
     'alamat' => $alamat,
+    'tgl_bergabung' => $tglBergabung,
+    'email' => $email,
     'no_hp' => $noHp,
 ];
 

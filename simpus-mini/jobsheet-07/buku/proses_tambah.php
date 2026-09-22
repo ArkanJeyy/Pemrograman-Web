@@ -8,8 +8,7 @@ $isbn = trim($_POST['isbn'] ?? '');
 $stok = $_POST['stok'] ?? '';
 $kategori = trim($_POST['kategori'] ?? '');
 
-// Validasi server-side — wajib ada meski sudah divalidasi JS di Jobsheet 5,
-// karena validasi client bisa dilewati (nonaktifkan JS / kirim request manual).
+// Validasi server-side — wajib ada meski sudah divalidasi JS
 $errors = [];
 if ($judul === '') {
     $errors[] = "Judul wajib diisi.";
@@ -19,6 +18,11 @@ if ($pengarang === '') {
 }
 if (!is_numeric($tahun) || $tahun < 1900 || $tahun > 2026) {
     $errors[] = "Tahun harus di antara 1900-2026.";
+}
+if ($isbn === '') {
+    $errors[] = "ISBN wajib diisi.";
+} elseif (!preg_match('/^[0-9\-]+$/', $isbn)) {
+    $errors[] = "Format ISBN tidak valid (hanya boleh angka dan tanda hubung).";
 }
 if (!is_numeric($stok) || $stok < 0) {
     $errors[] = "Stok tidak boleh negatif.";
