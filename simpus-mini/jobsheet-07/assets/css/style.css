@@ -21,6 +21,28 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Styling dasar untuk notifikasi flash */
+.flash {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Tipe notifikasi sukses (Warna hijau) */
+.flash-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+/* Tipe notifikasi error/gagal (Warna merah) */
+.flash-error {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
 /* ===== Header & Navbar (Flexbox) ===== */
 header {
   background-color: #224834;
