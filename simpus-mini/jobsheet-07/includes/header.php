@@ -1,6 +1,8 @@
-<?php $base = $base ?? './'; // Atau sesuaikan dengan jalur base URL kamu
+<?php $base = $base ?? './'; 
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Prefix relatif ke root proyek ini (bukan root domain) — supaya
 // /assets, /index.php, dst tetap benar walau proyek diakses lewat
@@ -30,6 +32,8 @@ $base = $__rel === '' ? '' : str_repeat('../', substr_count($__rel, '/') + 1);
                 <li><a href="<?php echo $base; ?>buku/tambah.php">Tambah Buku</a></li>
                 <li><a href="<?php echo $base; ?>anggota/list.php">Daftar Anggota</a></li>
                 <li><a href="<?php echo $base; ?>anggota/tambah.php">Tambah Anggota</a></li>
+                <li><a href="<?php echo $base; ?>debug_session.php" style="color: #ffc107;">Debug Session</a></li>
+                <li><a href="<?php echo $base; ?>reset.php" onclick="return confirm('Yakin ingin reset semua data?');">Reset Data</a></li>
             </ul>
         </nav>
     </header>
