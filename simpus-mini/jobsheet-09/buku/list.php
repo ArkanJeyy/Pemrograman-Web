@@ -50,7 +50,8 @@ if ($keyword !== '') {
                 <tr>
                     <th>Judul</th>
                     <th>Pengarang</th>
-                    <th>Tahun</th>
+                    <th>Tahun Terbit</th>
+                    <th>ISBN</th>
                     <th>Stok</th>
                     <th>Kategori</th>
                     <th>Tanggal Ditambahkan</th>
@@ -70,6 +71,7 @@ if ($keyword !== '') {
                             <td><?php echo htmlspecialchars($buku['judul'] ?? '-'); ?></td>
                             <td><?php echo htmlspecialchars($buku['pengarang'] ?? '-'); ?></td>
                             <td><?php echo htmlspecialchars($buku['tahun'] ?? '-'); ?></td>
+                            <td><?php echo htmlspecialchars($buku['isbn'] ?? '-'); ?></td>
                             <td><?php echo htmlspecialchars($buku['stok'] ?? '-'); ?></td>
                             <td><?php echo htmlspecialchars($buku['kategori'] ?? '-'); ?></td>
                             <td><?php echo htmlspecialchars($buku['tanggal_ditambahkan'] ?? '-'); ?></td>
