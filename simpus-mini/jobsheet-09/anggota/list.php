@@ -1,13 +1,33 @@
 <?php
-require_once __DIR__ . '/../includes/koneksi.php'; 
-
 $page_title = "Daftar Anggota";
 include __DIR__ . '/../includes/header.php';
+require __DIR__ . '/../includes/koneksi.php';
 
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
-$daftarAnggota = $pdo->query("SELECT * FROM anggota ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+$perPage = 5;
+$page = max(1, (int) ($_GET['page'] ?? 1));
+$offset = ($page - 1) * $perPage;
+$keyword = trim($_GET['q'] ?? '');
+
+if ($keyword !== '') {
+    $hitung = $pdo->prepare("SELECT COUNT(*) FROM anggota WHERE nama ILIKE :kw OR no_anggota ILIKE :kw");
+    $hitung->execute(['kw' => '%' . $keyword . '%']);
+    $totalRows = $hitung->fetchColumn();
+
+    $stmt = $pdo->prepare("SELECT * FROM anggota WHERE nama ILIKE :kw OR no_anggota ILIKE :kw ORDER BY id DESC LIMIT :limit OFFSET :offset");
+    $stmt->bindValue('kw', '%' . $keyword . '%');
+} else {
+    $totalRows = $pdo->query("SELECT COUNT(*) FROM anggota")->fetchColumn();
+    $stmt = $pdo->prepare("SELECT * FROM anggota ORDER BY id DESC LIMIT :limit OFFSET :offset");
+}
+$stmt->bindValue('limit', $perPage, PDO::PARAM_INT);
+$stmt->bindValue('offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+
+$daftarAnggota = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$totalPages = max(1, (int) ceil($totalRows / $perPage));
 ?>
 
 <section>
@@ -20,22 +40,15 @@ $daftarAnggota = $pdo->query("SELECT * FROM anggota ORDER BY id DESC")->fetchAll
     <?php endif; ?>
 
     <div class="search-box">
-        <label for="search-input">Cari Nama Anggota</label>
-        <input 
-            type="text" 
-            id="search-input" 
-            placeholder="Ketik nama anggota..." 
-        />
-        <button 
-            type="button" 
-            id="btn-reload" 
-            onclick="window.location.reload();" 
-            style="padding: 0.5rem 1rem; margin-left: 0.5rem; cursor: pointer;">
-            Muat Ulang
-        </button>
+        <form method="get" action="list.php">
+            <span>
+                <label for="search-input">Cari Nama Anggota</label><br>
+                <input type="text" id="search-input" name="q" value="<?php echo htmlspecialchars($keyword); ?>" placeholder="Ketik nama anggota...">
+            </span>
+            <button type="submit">Cari</button>
+            <a href="list.php"><button type="button">Muat Ulang</button></a>
+        </form>
     </div>
-
-    <p id="loading-indicator" style="display: none">Memuat data...</p>
 
     <div class="table-responsive">
         <table>
@@ -52,34 +65,38 @@ $daftarAnggota = $pdo->query("SELECT * FROM anggota ORDER BY id DESC")->fetchAll
             </thead>
             <tbody>
                 <?php if (empty($daftarAnggota)): ?>
-                    <tr>
-                        <td colspan="7" style="text-align: center;">
-                            Belum ada data anggota. Silakan tambah lewat menu "Tambah Anggota".
-                        </td>
-                    </tr>
+                <tr>
+                    <td colspan="7">Tidak ada data anggota yang cocok.</td>
+                </tr>
                 <?php else: ?>
                     <?php foreach ($daftarAnggota as $anggota): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($anggota['nama'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($anggota['no_anggota'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($anggota['alamat'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($anggota['email'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($anggota['no_hp'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($anggota['tgl_bergabung'] ?? '-'); ?></td>
-                            <td>
-                                <a href="edit.php?id=<?php echo urlencode($anggota['id']); ?>">
-                                    <button type="button" class="btn-edit">Edit</button>
-                                </a>
-                                <a href="proses_hapus.php?id=<?php echo urlencode($anggota['id']); ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                    <button type="button" class="btn-delete">Hapus</button>
-                                </a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td><?php echo htmlspecialchars($anggota['nama'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($anggota['no_anggota'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($anggota['alamat'] ?? '-'); ?></td>
+                        <td><?php echo htmlspecialchars($anggota['email'] ?? '-'); ?></td>
+                        <td><?php echo htmlspecialchars($anggota['no_hp'] ?? '-'); ?></td>
+                        <td><?php echo htmlspecialchars($anggota['tanggal_bergabung'] ?? '-'); ?></td>
+                        <td>
+                            <a href="edit.php?id=<?php echo urlencode($anggota['id']); ?>" class="btn-edit">Edit</a>
+                            <form class="form-hapus" method="post" action="hapus.php" style="display:inline;">
+                                <input type="hidden" name="id" value="<?php echo htmlspecialchars($anggota['id']); ?>">
+                                <button type="submit" class="btn-delete">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
         </table>
     </div>
+
+    <nav class="pagination">
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a href="list.php?page=<?php echo $i; ?><?php echo $keyword !== '' ? '&q=' . urlencode($keyword) : ''; ?>"
+           class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
+        <?php endfor; ?>
+    </nav>
 </section>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
