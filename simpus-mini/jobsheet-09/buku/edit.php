@@ -21,46 +21,60 @@ if (!$buku) {
     exit;
 }
 ?>
-        <section>
-            <h2>Edit Buku</h2>
 
-            <?php if ($flash): ?>
-                <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
-            <?php endif; ?>
+<section>
+    <h2>Edit Buku</h2>
 
-            <form id="form-tambah" method="post" action="proses_edit.php">
-                <input type="hidden" name="id" value="<?php echo $buku['id']; ?>">
-                <p>
-                    <label for="judul">Judul</label><br>
-                    <input type="text" id="judul" name="judul" value="<?php echo $buku['judul']; ?>" required>
-                </p>
-                <p>
-                    <label for="pengarang">Pengarang</label><br>
-                    <input type="text" id="pengarang" name="pengarang" value="<?php echo $buku['pengarang']; ?>" required>
-                </p>
-                <p>
-                    <label for="tahun">Tahun Terbit</label><br>
-                    <input type="number" id="tahun" name="tahun" min="1900" max="2026" value="<?php echo $buku['tahun']; ?>" required>
-                </p>
-                <p>
-                    <label for="isbn">ISBN</label><br>
-                    <input type="text" id="isbn" name="isbn" value="<?php echo $buku['isbn']; ?>">
-                </p>
-                <p>
-                    <label for="stok">Stok</label><br>
-                    <input type="number" id="stok" name="stok" min="0" value="<?php echo $buku['stok']; ?>" required>
-                </p>
-                <p>
-                    <label for="kategori">Kategori</label><br>
-                    <select id="kategori" name="kategori">
-                        <?php foreach (['fiksi' => 'Fiksi', 'non-fiksi' => 'Non-Fiksi', 'referensi' => 'Referensi'] as $value => $label): ?>
-                        <option value="<?php echo $value; ?>" <?php echo $buku['kategori'] === $value ? 'selected' : ''; ?>><?php echo $label; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </p>
-                <p>
-                    <button type="submit">Update</button>
-                </p>
-            </form>
-        </section>
+    <?php if ($flash): ?>
+        <p class="flash flash-<?php echo htmlspecialchars($flash['type']); ?>">
+            <?php echo htmlspecialchars($flash['pesan']); ?>
+        </p>
+    <?php endif; ?>
+
+    <!-- Ditambahkan onsubmit confirm() untuk konfirmasi sebelum update data -->
+    <form id="form-edit" method="post" action="proses_edit.php" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan perubahan data buku ini?');">
+        <input type="hidden" name="id" value="<?php echo htmlspecialchars($buku['id']); ?>">
+        
+        <p>
+            <label for="judul">Judul</label><br>
+            <input type="text" id="judul" name="judul" value="<?php echo htmlspecialchars($buku['judul'] ?? ''); ?>" required>
+        </p>
+        
+        <p>
+            <label for="pengarang">Pengarang</label><br>
+            <input type="text" id="pengarang" name="pengarang" value="<?php echo htmlspecialchars($buku['pengarang'] ?? ''); ?>" required>
+        </p>
+        
+        <p>
+            <label for="tahun">Tahun Terbit</label><br>
+            <input type="number" id="tahun" name="tahun" min="1900" max="2026" value="<?php echo htmlspecialchars($buku['tahun'] ?? ''); ?>" required>
+        </p>
+        
+        <p>
+            <label for="isbn">ISBN</label><br>
+            <input type="text" id="isbn" name="isbn" value="<?php echo htmlspecialchars($buku['isbn'] ?? ''); ?>">
+        </p>
+        
+        <p>
+            <label for="stok">Stok</label><br>
+            <input type="number" id="stok" name="stok" min="0" value="<?php echo htmlspecialchars($buku['stok'] ?? 0); ?>" required>
+        </p>
+        
+        <p>
+            <label for="kategori">Kategori</label><br>
+            <select id="kategori" name="kategori">
+                <?php foreach (['fiksi' => 'Fiksi', 'non-fiksi' => 'Non-Fiksi', 'referensi' => 'Referensi'] as $value => $label): ?>
+                    <option value="<?php echo $value; ?>" <?php echo ($buku['kategori'] ?? '') === $value ? 'selected' : ''; ?>>
+                        <?php echo $label; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </p>
+        
+        <p>
+            <button type="submit">Update</button>
+        </p>
+    </form>
+</section>
+
 <?php include __DIR__ . '/../includes/footer.php'; ?>
