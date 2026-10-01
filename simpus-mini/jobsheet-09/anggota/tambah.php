@@ -37,10 +37,10 @@ unset($_SESSION['flash']);
             <input type="text" id="no_hp" name="no_hp">
         </p>
         <p>
-        <p>
             <label for="tanggal_bergabung">Tanggal Bergabung</label><br>
-            <input type="date" id="tanggal_bergabung" name="tanggal_bergabung">
+            <input type="date" id="tanggal_bergabung" name="tanggal_bergabung" value="<?php echo date('Y-m-d'); ?>">
         </p>
+        <p>
             <button type="submit">Simpan</button>
         </p>
     </form>

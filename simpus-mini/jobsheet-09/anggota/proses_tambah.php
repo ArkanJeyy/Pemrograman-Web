@@ -9,7 +9,12 @@ $noAnggota        = trim($_POST['no_anggota'] ?? '');
 $alamat           = trim($_POST['alamat'] ?? '');
 $email            = trim($_POST['email'] ?? '');
 $noHp             = trim($_POST['no_hp'] ?? '');
-$tanggalBergabung = trim($_POST['tanggal_bergabung'] ?? $_POST['tanggal_bergabung'] ?? '');
+$tanggalBergabung = trim($_POST['tanggal_bergabung'] ?? '');
+
+// Jika tanggal bergabung tidak diisi, set default ke tanggal hari ini
+if ($tanggalBergabung === '') {
+    $tanggalBergabung = date('Y-m-d');
+}
 
 // Validasi Server-Side
 $errors = [];
@@ -44,12 +49,12 @@ try {
             
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        ':nama'          => $nama,
-        ':no_anggota'    => $noAnggota,
-        ':alamat'        => $alamat,
-        ':email'         => $email,
-        ':no_hp'         => $noHp,
-        ':tanggal_bergabung' => $tanggalBergabung !== '' ? $tanggalBergabung : null,
+        ':nama'              => $nama,
+        ':no_anggota'        => $noAnggota,
+        ':alamat'            => $alamat,
+        ':email'             => $email !== '' ? $email : null,
+        ':no_hp'             => $noHp,
+        ':tanggal_bergabung' => $tanggalBergabung,
     ]);
 
     $_SESSION['flash'] = [

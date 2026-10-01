@@ -6,25 +6,33 @@ require __DIR__ . '/../includes/koneksi.php';
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
-$perPage = 5;
+// Jumlah baris per halaman diset ke 10 sesuai instruksi tugas 2
+$perPage = 10;
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $offset = ($page - 1) * $perPage;
 $keyword = trim($_GET['q'] ?? '');
 
 if ($keyword !== '') {
-    $hitung = $pdo->prepare("SELECT COUNT(*) FROM anggota WHERE nama ILIKE :kw OR no_anggota ILIKE :kw");
-    $hitung->execute(['kw' => '%' . $keyword . '%']);
+    $searchKw = '%' . $keyword . '%';
+
+    // 1. Hitung total baris yang cocok dengan Nama ATAU No. Anggota
+    $hitung = $pdo->prepare("SELECT COUNT(*) FROM anggota WHERE nama ILIKE :kw1 OR no_anggota::text ILIKE :kw2");
+    $hitung->execute([
+        'kw1' => $searchKw,
+        'kw2' => $searchKw
+    ]);
     $totalRows = $hitung->fetchColumn();
 
-    $stmt = $pdo->prepare("SELECT * FROM anggota WHERE nama ILIKE :kw OR no_anggota ILIKE :kw ORDER BY id DESC LIMIT :limit OFFSET :offset");
-    $stmt->bindValue('kw', '%' . $keyword . '%');
+    // 2. Ambil data dengan memasukkan LIMIT & OFFSET langsung dalam string query
+    $stmt = $pdo->prepare("SELECT * FROM anggota WHERE nama ILIKE :kw1 OR no_anggota::text ILIKE :kw2 ORDER BY id DESC LIMIT $perPage OFFSET $offset");
+    $stmt->execute([
+        'kw1' => $searchKw,
+        'kw2' => $searchKw
+    ]);
 } else {
     $totalRows = $pdo->query("SELECT COUNT(*) FROM anggota")->fetchColumn();
-    $stmt = $pdo->prepare("SELECT * FROM anggota ORDER BY id DESC LIMIT :limit OFFSET :offset");
+    $stmt = $pdo->query("SELECT * FROM anggota ORDER BY id DESC LIMIT $perPage OFFSET $offset");
 }
-$stmt->bindValue('limit', $perPage, PDO::PARAM_INT);
-$stmt->bindValue('offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
 
 $daftarAnggota = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalPages = max(1, (int) ceil($totalRows / $perPage));
@@ -42,11 +50,13 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
     <div class="search-box">
         <form method="get" action="list.php">
             <span>
-                <label for="search-input">Cari Nama Anggota</label><br>
-                <input type="text" id="search-input" name="q" value="<?php echo htmlspecialchars($keyword); ?>" placeholder="Ketik nama anggota...">
+                <label for="search-input">Cari Nama / No. Anggota</label><br>
+                <input type="text" id="search-input" name="q" value="<?php echo htmlspecialchars($keyword); ?>" placeholder="Ketik nama atau no. anggota...">
             </span>
             <button type="submit">Cari</button>
-            <a href="list.php"><button type="button">Muat Ulang</button></a>
+            <?php if ($keyword !== ''): ?>
+                <a href="list.php"><button type="button">Muat Ulang</button></a>
+            <?php endif; ?>
         </form>
     </div>
 
@@ -79,9 +89,9 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                         <td><?php echo htmlspecialchars($anggota['tanggal_bergabung'] ?? '-'); ?></td>
                         <td>
                             <a href="edit.php?id=<?php echo urlencode($anggota['id']); ?>" class="btn-edit">Edit</a>
-                            <form class="form-hapus" method="post" action="hapus.php" style="display:inline;">
+                            <form class="form-hapus" method="post" action="hapus.php" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus anggota ini?');">
                                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($anggota['id']); ?>">
-                                <button type="submit" class="btn-delete">Hapus</button>
+                                <button type="submit" class="btn-hapus">Hapus</button>
                             </form>
                         </td>
                     </tr>
