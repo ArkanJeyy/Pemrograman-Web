@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/koneksi.php';
 
 // Ambil dan bersihkan data dari form
