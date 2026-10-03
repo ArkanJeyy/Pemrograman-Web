@@ -1,14 +1,10 @@
 <?php
-// Guard clause: di-include di baris paling atas setiap halaman yang
-// membutuhkan login (sebelum header.php mengeluarkan output apa pun),
-// agar header('Location: ...') masih bisa dipanggil.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 require_once __DIR__ . '/koneksi.php';
 
-// FITUR: Auto-login menggunakan Cookie jika session belum set
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     $token = $_COOKIE['remember_token'];
 
@@ -23,22 +19,28 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     }
 }
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: ../auth/login.php');
-    exit;
+$current_script = basename($_SERVER['SCRIPT_NAME']);
+$public_pages   = ['login.php', 'register.php', 'proses_login.php', 'proses_register.php'];
+
+if (!in_array($current_script, $public_pages)) {
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: ../auth/login.php');
+        exit;
+    }
 }
 
 /**
- * Memeriksa apakah user yang sedang login memiliki role yang diizinkan.
+ * Memeriksa hak akses user berdasarkan role (RBAC).
+ * Contoh penggunaan: check_role(['admin']);
  * 
- * @param array $allowed_roles Contoh: ['admin']
+ * @param array $allowed_roles
  */
 function check_role(array $allowed_roles) {
     $user_role = $_SESSION['role'] ?? '';
 
     if (!in_array($user_role, $allowed_roles)) {
         $_SESSION['flash'] = [
-            'type' => 'error',
+            'type'  => 'error',
             'pesan' => 'Akses ditolak! Anda tidak memiliki izin untuk mengakses halaman tersebut.'
         ];
         header('Location: ../index.php');
