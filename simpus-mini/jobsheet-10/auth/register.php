@@ -33,6 +33,14 @@ unset($_SESSION['flash']);
                     <label for="password">Password</label><br>
                     <input type="password" id="password" name="password" required minlength="6">
                 </p>
+                <!-- Tambahan Pilihan Role -->
+                <p>
+                    <label for="role">Role / Peran</label><br>
+                    <select id="role" name="role" required>
+                        <option value="petugas">Petugas</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </p>
                 <p>
                     <button type="submit">Daftar</button>
                 </p>
