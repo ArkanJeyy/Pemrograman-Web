@@ -91,6 +91,20 @@ header nav a {
   text-decoration: underline;
 }
 
+/* Mereset agar checkbox tidak memakan lebar 100% */
+form .remember_me input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+form .remember_me label {
+    display: inline-flex;
+    align-items: center;
+    font-weight: normal;
+    cursor: pointer;
+}
+
 /* ===== Main Layout ===== */
 main {
   max-width: 1000px;
