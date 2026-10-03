@@ -8,3 +8,5 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL DEFAULT 'petugas'
 );
+
+ALTER TABLE users ADD COLUMN remember_token VARCHAR(255) NULL;
