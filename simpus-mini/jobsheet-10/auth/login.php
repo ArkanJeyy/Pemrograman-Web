@@ -17,7 +17,7 @@ unset($_SESSION['flash']);
             <h2>Login Petugas</h2>
 
             <?php if ($flash): ?>
-                <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
+                <p class="flash flash-<?php echo htmlspecialchars($flash['type']); ?>"><?php echo htmlspecialchars($flash['pesan']); ?></p>
             <?php endif; ?>
 
             <form method="post" action="proses_login.php">
@@ -28,6 +28,11 @@ unset($_SESSION['flash']);
                 <p>
                     <label for="password">Password</label><br>
                     <input type="password" id="password" name="password" required>
+                </p>
+                <p class="remember_me">
+                    <label>
+                        <input type="checkbox" name="remember_me" value="1"> Ingat Saya
+                    </label>
                 </p>
                 <p>
                     <button type="submit">Masuk</button>
