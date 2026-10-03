@@ -91,10 +91,14 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                         <td><?php echo htmlspecialchars($buku['created_at'] ?? $buku['tanggal_ditambahkan'] ?? '-'); ?></td>
                         <td>
                             <a href="edit.php?id=<?php echo urlencode($buku['id']); ?>" class="btn-edit">Edit</a>
-                            <form class="form-hapus" method="post" action="hapus.php" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
-                                <input type="hidden" name="id" value="<?php echo htmlspecialchars($buku['id']); ?>">
-                                <button type="submit" class="btn-hapus">Hapus</button>
-                            </form>
+                            
+                            <!-- FITUR RBAC: Tombol Hapus hanya ditampilkankan jika role user adalah admin -->
+                            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                                <form class="form-hapus" method="post" action="hapus.php" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
+                                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($buku['id']); ?>">
+                                    <button type="submit" class="btn-hapus">Hapus</button>
+                                </form>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>

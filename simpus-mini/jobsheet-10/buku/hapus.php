@@ -1,6 +1,7 @@
 <?php
 session_start();
 require __DIR__ . '/../includes/auth.php';
+check_role(['admin']);
 require __DIR__ . '/../includes/koneksi.php';
 
 // Sengaja hanya menerima POST (bukan GET) agar penghapusan tidak bisa

@@ -16,7 +16,6 @@ $keyword = trim($_GET['q'] ?? '');
 if ($keyword !== '') {
     $searchKw = '%' . $keyword . '%';
 
-    // 1. Hitung total baris yang cocok dengan Nama ATAU No. Anggota
     $hitung = $pdo->prepare("SELECT COUNT(*) FROM anggota WHERE nama ILIKE :kw1 OR no_anggota::text ILIKE :kw2");
     $hitung->execute([
         'kw1' => $searchKw,
@@ -24,7 +23,6 @@ if ($keyword !== '') {
     ]);
     $totalRows = $hitung->fetchColumn();
 
-    // 2. Ambil data dengan memasukkan LIMIT & OFFSET langsung dalam string query
     $stmt = $pdo->prepare("SELECT * FROM anggota WHERE nama ILIKE :kw1 OR no_anggota::text ILIKE :kw2 ORDER BY id DESC LIMIT $perPage OFFSET $offset");
     $stmt->execute([
         'kw1' => $searchKw,
@@ -90,10 +88,13 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                         <td><?php echo htmlspecialchars($anggota['tanggal_bergabung'] ?? '-'); ?></td>
                         <td>
                             <a href="edit.php?id=<?php echo urlencode($anggota['id']); ?>" class="btn-edit">Edit</a>
-                            <form class="form-hapus" method="post" action="hapus.php" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus anggota ini?');">
-                                <input type="hidden" name="id" value="<?php echo htmlspecialchars($anggota['id']); ?>">
-                                <button type="submit" class="btn-hapus">Hapus</button>
-                            </form>
+                            
+                            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                                <form class="form-hapus" method="post" action="hapus.php" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus anggota ini?');">
+                                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($anggota['id']); ?>">
+                                    <button type="submit" class="btn-hapus">Hapus</button>
+                                </form>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
