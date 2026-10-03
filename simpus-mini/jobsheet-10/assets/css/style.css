@@ -91,17 +91,26 @@ header nav a {
   text-decoration: underline;
 }
 
-/* Mereset agar checkbox tidak memakan lebar 100% */
-form .remember_me input[type="checkbox"] {
-    width: auto;
-    margin-right: 0.5rem;
-    vertical-align: middle;
+/* Mereset agar checkbox tidak menggunakan lebar penuh (100%) */
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
 }
 
-form .remember_me label {
-    display: inline-flex;
-    align-items: center;
-    font-weight: normal;
+.remember-me label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important; /* Memberi jarak halus antar kotak dan teks */
+    width: auto !important;
+    font-weight: normal !important;
+    cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+    width: auto !important; /* Mencegah checkbox terbeban lebar 100% */
+    height: auto !important;
+    margin: 0 !important;
     cursor: pointer;
 }
 
