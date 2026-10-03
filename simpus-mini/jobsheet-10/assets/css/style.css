@@ -23,24 +23,24 @@ a:hover {
 
 /* Styling dasar untuk notifikasi flash */
 .flash {
-    padding: 0.75rem 1.25rem;
-    margin-bottom: 1rem;
-    border-radius: 6px;
-    font-weight: 500;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  font-weight: 500;
 }
 
 /* Tipe notifikasi sukses (Warna hijau) */
 .flash-success {
-    background-color: #d1e7dd;
-    color: #0f5132;
-    border: 1px solid #badbcc;
+  background-color: #d1e7dd;
+  color: #0f5132;
+  border: 1px solid #badbcc;
 }
 
 /* Tipe notifikasi error/gagal (Warna merah) */
 .flash-error {
-    background-color: #f8d7da;
-    color: #842029;
-    border: 1px solid #f5c2c7;
+  background-color: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
 }
 
 /* ===== Header & Navbar (Flexbox) ===== */
@@ -67,6 +67,28 @@ header nav ul {
 header nav a {
   color: #fff;
   font-weight: 500;
+}
+
+.navbar-brand,
+.nav-link {
+  color: #fff !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #d9e8f5 !important;
+}
+
+.auth-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff;
+}
+
+.auth-status a {
+  color: #fff;
+  text-decoration: underline;
 }
 
 /* ===== Main Layout ===== */
@@ -164,6 +186,7 @@ td button {
   font-size: 0.85rem;
 }
 
+td button:first-of-type,
 td button.btn-edit {
   background-color: #f0ad4e;
   color: #fff;
@@ -174,9 +197,74 @@ td button.btn-detail {
   color: #fff;
 }
 
+td button:last-of-type,
 td button.btn-delete {
   background-color: #d9534f;
   color: #fff;
+}
+
+
+td a.btn-edit {
+  display: inline-block;
+  padding: 0.35rem 0.7rem;
+  margin-right: 0.35rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background-color: #f0ad4e;
+  color: #fff;
+}
+
+td form.form-hapus {
+  display: inline;
+}
+
+/* ===== Pagination [Fitur ditambahkan dari CSS 1] ===== */
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.pagination a {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #cdd4da;
+  border-radius: 4px;
+  color: #224834;
+}
+
+.pagination a.active {
+  background-color: #224834;
+  color: #fff;
+  border-color: #224834;
+}
+
+/* ===== Kolom Pencarian ===== */
+.search-box {
+  margin-bottom: 1rem;
+}
+
+.search-box input {
+  width: 100%;
+  max-width: 320px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #b9bec3;
+  border-radius: 4px;
+}
+
+/* [Fitur ditambahkan dari CSS 1] Form & Button untuk Search Box */
+.search-box form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.search-box button {
+  padding: 0.55rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #224834;
+  color: #fff;
+  cursor: pointer;
 }
 
 /* ===== Form ===== */
@@ -211,18 +299,9 @@ form button[type="submit"] {
   cursor: pointer;
 }
 
-.navbar-brand,
-.nav-link {
-    color: #fff !important;
-}
-.nav-link:hover,
-.nav-link.active {
-    color: #d9e8f5 !important;
-}
-
 form button[type="submit"]:hover,
 button[type="submit"]:hover {
-    background-color: #164869 !important;
+  background-color: #164869 !important;
 }
 
 /* ===== Footer ===== */
@@ -239,40 +318,26 @@ footer {
   overflow-x: auto;
 }
 
-/* ===== Hamburger Menu (checkbox hack) ===== */
+/* ===== Hamburger Menu ===== */
 .nav-toggle {
   display: none;
 }
 
-/* ===== Hamburger Menu (JS-driven) ===== */
 .nav-toggle-label {
-    display: none;
-    font-size: 1.6rem;
-    color: #fff;
-    background: none;
-    border: none;
-    cursor: pointer;
+  display: none;
+  font-size: 1.6rem;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 /* ===== Pesan Error Validasi ===== */
 .error {
-    display: block;
-    color: #d9534f;
-    font-size: 0.85rem;
-    margin-top: 0.25rem;
-}
-
-/* ===== Kolom Pencarian ===== */
-.search-box {
-    margin-bottom: 1rem;
-}
-
-.search-box input {
-    width: 100%;
-    max-width: 320px;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #b9bec3;
-    border-radius: 4px;
+  display: block;
+  color: #d9534f;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
 }
 
 /* ===== Responsive Breakpoints ===== */
