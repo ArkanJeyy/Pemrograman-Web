@@ -34,7 +34,7 @@ if (!$buku) {
 
     <!-- Ditambahkan onsubmit confirm() untuk konfirmasi sebelum update data -->
     <form id="form-edit" method="post" action="proses_edit.php" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan perubahan data buku ini?');">
-        <input type="hidden" name="id" value="<?php echo e($buku['id']); ?>">
+        <input type="hidden" name="id" value="<?php echo (int) e($buku['id']); ?>">
         
         <p>
             <label for="judul">Judul</label><br>
