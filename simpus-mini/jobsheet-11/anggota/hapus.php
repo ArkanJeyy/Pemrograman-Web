@@ -1,8 +1,11 @@
 <?php
 session_start();
 require __DIR__ . '/../includes/auth.php';
+require __DIR__ . '/../includes/csrf.php';
 check_role(['admin']);
 require __DIR__ . '/../includes/koneksi.php';
+
+csrf_verify();
 
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

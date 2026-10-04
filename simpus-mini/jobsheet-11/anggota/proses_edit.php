@@ -1,7 +1,10 @@
 <?php
 session_start();
 require __DIR__ . '/../includes/auth.php';
+require __DIR__ . '/../includes/csrf.php';
 require __DIR__ . '/../includes/koneksi.php';
+
+csrf_verify();
 
 $id = $_POST['id'] ?? null;
 $nama = trim($_POST['nama'] ?? '');

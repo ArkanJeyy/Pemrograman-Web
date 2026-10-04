@@ -2,16 +2,18 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
+require __DIR__ . '/../includes/csrf.php';
 require_once __DIR__ . '/../includes/koneksi.php';
+
+csrf_verify();
 
 $username    = trim($_POST['username'] ?? '');
 $password    = $_POST['password'] ?? '';
 $remember_me = isset($_POST['remember_me']);
 
 // Konfigurasi Batas Login
-$max_attempts = 3;         // Maksimal 3 kali percobaan gagal
-$lockout_time = 1 * 60;   // Waktu kunci 1 menit (60 detik)
+$max_attempts = 3;        
+$lockout_time = 1 * 60;   
 
 // Inisialisasi session tracking
 $_SESSION['login_attempts']    = $_SESSION['login_attempts'] ?? 0;
@@ -30,7 +32,6 @@ if ($_SESSION['login_attempts'] >= $max_attempts) {
         header('Location: login.php');
         exit;
     } else {
-        // Reset hitungan jika waktu kunci 10 menit sudah berlalu
         $_SESSION['login_attempts'] = 0;
     }
 }
@@ -42,7 +43,8 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // 3. JIKA LOGIN BERHASIL
 if ($user && password_verify($password, $user['password'])) {
-    // Reset penghitung percobaan gagal
+    session_regenerate_id(true);
+
     unset($_SESSION['login_attempts']);
     unset($_SESSION['last_attempt_time']);
 
@@ -53,7 +55,7 @@ if ($user && password_verify($password, $user['password'])) {
     // Fitur Ingat Saya (Berlaku 3 Hari)
     if ($remember_me) {
         $token  = bin2hex(random_bytes(32));
-        $expiry = time() + (3 * 24 * 60 * 60); // 3 hari (259.200 detik)
+        $expiry = time() + (3 * 24 * 60 * 60); 
 
         setcookie('remember_token', $token, [
             'expires'  => $expiry,
