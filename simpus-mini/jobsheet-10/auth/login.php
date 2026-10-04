@@ -3,11 +3,13 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Jika sudah login, langsung alihkan ke index.php
 if (isset($_SESSION['user_id'])) {
     header('Location: ../index.php');
     exit;
 }
 
+// Ambil pesan flash dari session sebelum memanggil header
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
@@ -34,9 +36,10 @@ include __DIR__ . '/../includes/header.php';
             <input type="password" id="password" name="password" required>
         </p>
         
-        <p class="remember-me">
-            <label for="remember_me">
-                <input type="checkbox" id="remember_me" name="remember_me" value="1"> Ingat Saya
+        <p class="remember-me" style="margin: 10px 0;">
+            <label for="remember_me" style="display: inline-flex; align-items: center; gap: 8px; width: auto; font-weight: normal; cursor: pointer;">
+                <input type="checkbox" id="remember_me" name="remember_me" value="1" style="width: auto; margin: 0; cursor: pointer;">
+                Ingat Saya
             </label>
         </p>
 

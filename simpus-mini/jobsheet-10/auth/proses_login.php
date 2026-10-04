@@ -25,7 +25,7 @@ if ($_SESSION['login_attempts'] >= $max_attempts) {
         $sisa_menit = ceil(($lockout_time - $selisih) / 60);
         $_SESSION['flash'] = [
             'type'  => 'error',
-            'pesan' => "Akun terkunci sementara karena 3x salah! Silakan coba lagi dalam {$sisa_menit} menit."
+            'pesan' => "Akun dikunci sementara karena 3x salah! Silakan coba lagi dalam {$sisa_menit} menit."
         ];
         header('Location: login.php');
         exit;
@@ -50,10 +50,10 @@ if ($user && password_verify($password, $user['password'])) {
     $_SESSION['nama']    = $user['nama'];
     $_SESSION['role']    = $user['role'];
 
-    // Fitur Ingat Saya (3 Hari)
+    // Fitur Ingat Saya (Berlaku 3 Hari)
     if ($remember_me) {
         $token  = bin2hex(random_bytes(32));
-        $expiry = time() + (3 * 24 * 60 * 60); // 3 hari
+        $expiry = time() + (3 * 24 * 60 * 60); // 3 hari (259.200 detik)
 
         setcookie('remember_token', $token, [
             'expires'  => $expiry,

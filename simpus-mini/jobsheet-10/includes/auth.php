@@ -1,10 +1,12 @@
 <?php
+// Guard clause: pastikan session selalu berjalan
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 require_once __DIR__ . '/koneksi.php';
 
+// 1. AUTO-LOGIN DARI COOKIE (Remember Me)
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     $token = $_COOKIE['remember_token'];
 
@@ -19,9 +21,11 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     }
 }
 
+// 2. PROTEKSI HALAMAN PRIVAT
 $current_script = basename($_SERVER['SCRIPT_NAME']);
 $public_pages   = ['login.php', 'register.php', 'proses_login.php', 'proses_register.php'];
 
+// Jika halaman yang diakses butuh login dan user belum login, lempar ke login.php
 if (!in_array($current_script, $public_pages)) {
     if (!isset($_SESSION['user_id'])) {
         header('Location: ../auth/login.php');
