@@ -222,8 +222,8 @@ td button.btn-detail {
 
 td button:last-of-type,
 td button.btn-delete {
-  background-color: #d9534f;
-  color: #fff;
+  background-color: #f70800e1 !important;
+  color: #fff !important;
 }
 
 
