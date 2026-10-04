@@ -15,7 +15,6 @@ $keyword = trim($_GET['q'] ?? '');
 if ($keyword !== '') {
     $searchKw = '%' . $keyword . '%';
 
-    // 1. Hitung total baris yang cocok dengan Judul ATAU Pengarang
     $hitung = $pdo->prepare("SELECT COUNT(*) FROM buku WHERE judul ILIKE :kw1 OR pengarang ILIKE :kw2");
     $hitung->execute([
         'kw1' => $searchKw,
@@ -23,7 +22,6 @@ if ($keyword !== '') {
     ]);
     $totalRows = $hitung->fetchColumn();
 
-    // 2. Ambil data dengan memasukkan LIMIT & OFFSET langsung sebagai nilai integer dalam SQL
     $stmt = $pdo->prepare("SELECT * FROM buku WHERE judul ILIKE :kw1 OR pengarang ILIKE :kw2 ORDER BY id DESC LIMIT $perPage OFFSET $offset");
     $stmt->execute([
         'kw1' => $searchKw,
@@ -51,7 +49,8 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
         <form method="get" action="list.php">
             <span>
                 <label for="search-input">Cari Judul / Pengarang Buku</label><br>
-                <input type="text" id="search-input" name="q" value="<?php echo htmlspecialchars($keyword); ?>" placeholder="Ketik judul / pengarang...">
+                <input type="text" id="search-input" name="q" value="<?php echo htmlspecialchars($keyword); ?>"
+                    placeholder="Ketik judul / pengarang...">
             </span>
             <button type="submit">Cari</button>
             <?php if ($keyword !== ''): ?>
@@ -76,31 +75,32 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
             </thead>
             <tbody>
                 <?php if (empty($daftarBuku)): ?>
-                <tr>
-                    <td colspan="8">Tidak ada data buku yang cocok.</td>
-                </tr>
+                    <tr>
+                        <td colspan="8">Tidak ada data buku yang cocok.</td>
+                    </tr>
                 <?php else: ?>
                     <?php foreach ($daftarBuku as $buku): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($buku['judul'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($buku['pengarang'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($buku['isbn'] ?? '-'); ?></td>
-                        <td><?php echo htmlspecialchars($buku['tahun'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($buku['stok'] ?? 0); ?></td>
-                        <td><?php echo htmlspecialchars($buku['kategori'] ?? '-'); ?></td>
-                        <td><?php echo htmlspecialchars($buku['created_at'] ?? $buku['tanggal_ditambahkan'] ?? '-'); ?></td>
-                        <td>
-                            <a href="edit.php?id=<?php echo urlencode($buku['id']); ?>" class="btn-edit">Edit</a>
-                            
-                            <!-- FITUR RBAC: Tombol Hapus hanya ditampilkankan jika role user adalah admin -->
-                            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                                <form class="form-hapus" method="post" action="hapus.php" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
-                                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($buku['id']); ?>">
-                                    <button type="submit" class="btn-hapus">Hapus</button>
-                                </form>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td><?php echo htmlspecialchars($buku['judul'] ?? ''); ?></td>
+                            <td><?php echo htmlspecialchars($buku['pengarang'] ?? ''); ?></td>
+                            <td><?php echo htmlspecialchars($buku['isbn'] ?? '-'); ?></td>
+                            <td><?php echo htmlspecialchars($buku['tahun'] ?? ''); ?></td>
+                            <td><?php echo htmlspecialchars($buku['stok'] ?? 0); ?></td>
+                            <td><?php echo htmlspecialchars($buku['kategori'] ?? '-'); ?></td>
+                            <td><?php echo htmlspecialchars($buku['created_at'] ?? $buku['tanggal_ditambahkan'] ?? '-'); ?></td>
+                            <td>
+                                <a href="edit.php?id=<?php echo urlencode($buku['id']); ?>" class="btn-edit">Edit</a>
+
+                                <!-- FITUR RBAC: Tombol Hapus hanya ditampilkankan jika role user adalah admin -->
+                                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                                    <form class="form-hapus" method="post" action="hapus.php" style="display:inline;"
+                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
+                                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($buku['id']); ?>">
+                                        <button type="submit" class="btn-delete">Hapus</button>
+                                    </form>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
@@ -109,8 +109,8 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
 
     <nav class="pagination">
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-        <a href="list.php?page=<?php echo $i; ?><?php echo $keyword !== '' ? '&q=' . urlencode($keyword) : ''; ?>"
-           class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
+            <a href="list.php?page=<?php echo $i; ?><?php echo $keyword !== '' ? '&q=' . urlencode($keyword) : ''; ?>"
+                class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
         <?php endfor; ?>
     </nav>
 </section>
