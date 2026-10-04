@@ -1,7 +1,10 @@
 <?php
 session_start();
 require __DIR__ . '/../includes/auth.php';
+require __DIR__ . '/../includes/csrf.php';
 require_once __DIR__ . '/../includes/koneksi.php';
+
+csrf_verify();
 
 // Ambil dan bersihkan data dari form
 $nama             = trim($_POST['nama'] ?? '');
@@ -65,7 +68,6 @@ try {
     exit;
 
 } catch (PDOException $e) {
-    // Handling error UNIQUE Constraint (SQLState 23505 di PostgreSQL)
     if ($e->getCode() === '23505') {
         $pesanError = "No. Anggota sudah dipakai, gunakan nomor lain.";
     } else {

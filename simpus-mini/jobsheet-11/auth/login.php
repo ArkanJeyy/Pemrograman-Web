@@ -21,8 +21,8 @@ include __DIR__ . '/../includes/header.php';
     <h2>Login Petugas</h2>
 
     <?php if ($flash): ?>
-        <p class="flash flash-<?php echo htmlspecialchars($flash['type']); ?>">
-            <?php echo htmlspecialchars($flash['pesan']); ?>
+        <p class="flash flash-<?php echo e($flash['type']); ?>">
+            <?php echo e($flash['pesan']); ?>
         </p>
     <?php endif; ?>
 

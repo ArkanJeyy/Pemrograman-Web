@@ -27,38 +27,38 @@ if (!$buku) {
     <h2>Edit Buku</h2>
 
     <?php if ($flash): ?>
-        <p class="flash flash-<?php echo htmlspecialchars($flash['type']); ?>">
-            <?php echo htmlspecialchars($flash['pesan']); ?>
+        <p class="flash flash-<?php echo e($flash['type']); ?>">
+            <?php echo e($flash['pesan']); ?>
         </p>
     <?php endif; ?>
 
     <!-- Ditambahkan onsubmit confirm() untuk konfirmasi sebelum update data -->
     <form id="form-edit" method="post" action="proses_edit.php" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan perubahan data buku ini?');">
-        <input type="hidden" name="id" value="<?php echo htmlspecialchars($buku['id']); ?>">
+        <input type="hidden" name="id" value="<?php echo e($buku['id']); ?>">
         
         <p>
             <label for="judul">Judul</label><br>
-            <input type="text" id="judul" name="judul" value="<?php echo htmlspecialchars($buku['judul'] ?? ''); ?>" required>
+            <input type="text" id="judul" name="judul" value="<?php echo e($buku['judul'] ?? ''); ?>" required>
         </p>
         
         <p>
             <label for="pengarang">Pengarang</label><br>
-            <input type="text" id="pengarang" name="pengarang" value="<?php echo htmlspecialchars($buku['pengarang'] ?? ''); ?>" required>
+            <input type="text" id="pengarang" name="pengarang" value="<?php echo e($buku['pengarang'] ?? ''); ?>" required>
         </p>
         
         <p>
             <label for="tahun">Tahun Terbit</label><br>
-            <input type="number" id="tahun" name="tahun" min="1900" max="2026" value="<?php echo htmlspecialchars($buku['tahun'] ?? ''); ?>" required>
+            <input type="number" id="tahun" name="tahun" min="1900" max="2026" value="<?php echo e($buku['tahun'] ?? ''); ?>" required>
         </p>
         
         <p>
             <label for="isbn">ISBN</label><br>
-            <input type="text" id="isbn" name="isbn" value="<?php echo htmlspecialchars($buku['isbn'] ?? ''); ?>">
+            <input type="text" id="isbn" name="isbn" value="<?php echo e($buku['isbn'] ?? ''); ?>">
         </p>
         
         <p>
             <label for="stok">Stok</label><br>
-            <input type="number" id="stok" name="stok" min="0" value="<?php echo htmlspecialchars($buku['stok'] ?? 0); ?>" required>
+            <input type="number" id="stok" name="stok" min="0" value="<?php echo e($buku['stok'] ?? 0); ?>" required>
         </p>
         
         <p>

@@ -41,8 +41,8 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
     <h2>Daftar Anggota</h2>
 
     <?php if ($flash): ?>
-        <p class="flash flash-<?php echo htmlspecialchars($flash['type']); ?>">
-            <?php echo htmlspecialchars($flash['pesan']); ?>
+        <p class="flash flash-<?php echo e($flash['type']); ?>">
+            <?php echo e($flash['pesan']); ?>
         </p>
     <?php endif; ?>
 
@@ -50,7 +50,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
         <form method="get" action="list.php">
             <span>
                 <label for="search-input">Cari Nama / No. Anggota</label><br>
-                <input type="text" id="search-input" name="q" value="<?php echo htmlspecialchars($keyword); ?>" placeholder="Ketik nama atau no. anggota...">
+                <input type="text" id="search-input" name="q" value="<?php echo e($keyword); ?>" placeholder="Ketik nama atau no. anggota...">
             </span>
             <button type="submit">Cari</button>
             <?php if ($keyword !== ''): ?>
@@ -80,18 +80,18 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                 <?php else: ?>
                     <?php foreach ($daftarAnggota as $anggota): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($anggota['nama'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($anggota['no_anggota'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($anggota['alamat'] ?? '-'); ?></td>
-                        <td><?php echo htmlspecialchars($anggota['email'] ?? '-'); ?></td>
-                        <td><?php echo htmlspecialchars($anggota['no_hp'] ?? '-'); ?></td>
-                        <td><?php echo htmlspecialchars($anggota['tanggal_bergabung'] ?? '-'); ?></td>
+                        <td><?php echo e($anggota['nama'] ?? ''); ?></td>
+                        <td><?php echo e($anggota['no_anggota'] ?? ''); ?></td>
+                        <td><?php echo e($anggota['alamat'] ?? '-'); ?></td>
+                        <td><?php echo e($anggota['email'] ?? '-'); ?></td>
+                        <td><?php echo e($anggota['no_hp'] ?? '-'); ?></td>
+                        <td><?php echo e($anggota['tanggal_bergabung'] ?? '-'); ?></td>
                         <td>
                             <a href="edit.php?id=<?php echo urlencode($anggota['id']); ?>" class="btn-edit">Edit</a>
                             
                             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                 <form class="form-hapus" method="post" action="hapus.php" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus anggota ini?');">
-                                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($anggota['id']); ?>">
+                                    <input type="hidden" name="id" value="<?php echo e($anggota['id']); ?>">
                                     <button type="submit" class="btn-hapus">Hapus</button>
                                 </form>
                             <?php endif; ?>

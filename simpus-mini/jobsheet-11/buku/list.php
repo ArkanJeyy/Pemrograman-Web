@@ -40,8 +40,8 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
     <h2>Daftar Buku</h2>
 
     <?php if ($flash): ?>
-        <p class="flash flash-<?php echo htmlspecialchars($flash['type']); ?>">
-            <?php echo htmlspecialchars($flash['pesan']); ?>
+        <p class="flash flash-<?php echo e($flash['type']); ?>">
+            <?php echo e($flash['pesan']); ?>
         </p>
     <?php endif; ?>
 
@@ -49,7 +49,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
         <form method="get" action="list.php">
             <span>
                 <label for="search-input">Cari Judul / Pengarang Buku</label><br>
-                <input type="text" id="search-input" name="q" value="<?php echo htmlspecialchars($keyword); ?>"
+                <input type="text" id="search-input" name="q" value="<?php echo e($keyword); ?>"
                     placeholder="Ketik judul / pengarang...">
             </span>
             <button type="submit">Cari</button>
@@ -81,13 +81,13 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                 <?php else: ?>
                     <?php foreach ($daftarBuku as $buku): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($buku['judul'] ?? ''); ?></td>
-                            <td><?php echo htmlspecialchars($buku['pengarang'] ?? ''); ?></td>
-                            <td><?php echo htmlspecialchars($buku['isbn'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($buku['tahun'] ?? ''); ?></td>
-                            <td><?php echo htmlspecialchars($buku['stok'] ?? 0); ?></td>
-                            <td><?php echo htmlspecialchars($buku['kategori'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($buku['created_at'] ?? $buku['tanggal_ditambahkan'] ?? '-'); ?></td>
+                            <td><?php echo e($buku['judul'] ?? ''); ?></td>
+                            <td><?php echo e($buku['pengarang'] ?? ''); ?></td>
+                            <td><?php echo e($buku['isbn'] ?? '-'); ?></td>
+                            <td><?php echo e($buku['tahun'] ?? ''); ?></td>
+                            <td><?php echo e($buku['stok'] ?? 0); ?></td>
+                            <td><?php echo e($buku['kategori'] ?? '-'); ?></td>
+                            <td><?php echo e($buku['created_at'] ?? $buku['tanggal_ditambahkan'] ?? '-'); ?></td>
                             <td>
                                 <a href="edit.php?id=<?php echo urlencode($buku['id']); ?>" class="btn-edit">Edit</a>
 
@@ -95,7 +95,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                     <form class="form-hapus" method="post" action="hapus.php" style="display:inline;"
                                         onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
-                                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($buku['id']); ?>">
+                                        <input type="hidden" name="id" value="<?php echo e($buku['id']); ?>">
                                         <button type="submit" class="btn-delete">Hapus</button>
                                     </form>
                                 <?php endif; ?>

@@ -11,8 +11,8 @@ unset($_SESSION['flash']);
     <h2>Tambah Buku</h2>
 
     <?php if ($flash): ?>
-        <p class="flash flash-<?php echo htmlspecialchars($flash['type']); ?>">
-            <?php echo htmlspecialchars($flash['pesan']); ?>
+        <p class="flash flash-<?php echo e($flash['type']); ?>">
+            <?php echo e($flash['pesan']); ?>
         </p>
     <?php endif; ?>
 
