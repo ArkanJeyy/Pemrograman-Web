@@ -47,6 +47,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
 
     <div class="search-box">
         <form method="get" action="list.php">
+
             <span>
                 <label for="search-input">Cari Judul / Pengarang Buku</label><br>
                 <input type="text" id="search-input" name="q" value="<?php echo e($keyword); ?>"
@@ -96,7 +97,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                                     <form class="form-hapus" method="post" action="hapus.php" style="display:inline;"
                                         onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
                                         <?php echo csrf_field(); ?>
-                                        
+
                                         <input type="hidden" name="id" value="<?php echo e($buku['id']); ?>">
                                         <button type="submit" class="btn-delete">Hapus</button>
                                     </form>

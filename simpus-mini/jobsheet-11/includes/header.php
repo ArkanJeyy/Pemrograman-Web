@@ -5,6 +5,13 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/csrf.php';
+
+
+// Menerapkan Header Content-Security-Policy
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; 
+style-src 'self' 'unsafe-inline'; img-src 'self' data:;");
+
+
 $sudahLogin = isset($_SESSION['user_id']);
 
 // Prefix relatif ke root proyek ini (bukan root domain) — supaya
@@ -21,7 +28,7 @@ $base = $__rel === '' ? '' : str_repeat('../', substr_count($__rel, '/') + 1);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIMPUS-Mini<?php echo isset($page_title) ? ' | ' . $page_title : ''; ?></title>
+    <title>SIMPUS-Mini<?php echo isset($page_title) ? ' | ' . e($page_title) : ''; ?></title>
     <link rel="stylesheet" href="<?php echo $base; ?>assets/css/style.css">
 </head>
 <body>
@@ -43,7 +50,7 @@ $base = $__rel === '' ? '' : str_repeat('../', substr_count($__rel, '/') + 1);
         </nav>
         <div class="auth-status">
             <?php if ($sudahLogin): ?>
-                <span><?php echo $_SESSION['nama']; ?></span>
+                <span class="user-info"><?php echo e($_SESSION['username'] ?? 'Pengunjung'); ?></span>
                 <a href="<?php echo $base; ?>auth/logout.php">Logout</a>
             <?php else: ?>
                 <a href="<?php echo $base; ?>auth/login.php">Login</a>
