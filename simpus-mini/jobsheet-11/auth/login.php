@@ -27,6 +27,8 @@ include __DIR__ . '/../includes/header.php';
     <?php endif; ?>
 
     <form method="post" action="proses_login.php">
+        <?php echo csrf_field(); ?>
+        
         <p class="form-group">
             <label for="username">Username</label><br>
             <input type="text" id="username" name="username" required>

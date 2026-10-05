@@ -91,6 +91,8 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                             
                             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                 <form class="form-hapus" method="post" action="hapus.php" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus anggota ini?');">
+                                    <?php echo csrf_field(); ?>
+                                    
                                     <input type="hidden" name="id" value="<?php echo e($anggota['id']); ?>">
                                     <button type="submit" class="btn-hapus">Hapus</button>
                                 </form>
