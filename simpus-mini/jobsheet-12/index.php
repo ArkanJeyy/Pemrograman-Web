@@ -1,12 +1,14 @@
 <?php
+require_once __DIR__ . '/includes/koneksi.php';
+
 $page_title = "Beranda";
 include __DIR__ . '/includes/header.php';
-include __DIR__. '/includes/koneksi.php';
 
-$totalBuku = count($_SESSION['buku'] ?? []);
-$totalAnggota = count($_SESSION['anggota'] ?? []);
-$sedangDipinjam = count($_SESSION['peminjaman'] ?? []);
-$bukuTerlambat = count($_SESSION['terlambat'] ?? []);
+// Ambil hitungan data sungguhan dari database PostgreSQL
+$totalBuku = $pdo->query("SELECT COUNT(*) FROM buku")->fetchColumn() ?: 0;
+$totalAnggota = $pdo->query("SELECT COUNT(*) FROM anggota")->fetchColumn() ?: 0;
+$sedangDipinjam = $pdo->query("SELECT COUNT(*) FROM peminjaman WHERE status = 'dipinjam'")->fetchColumn() ?: 0;
+$bukuTerlambat = $pdo->query("SELECT COUNT(*) FROM peminjaman WHERE status = 'dipinjam' AND tanggal_kembali < CURRENT_DATE")->fetchColumn() ?: 0;
 ?>
 
 <section>
