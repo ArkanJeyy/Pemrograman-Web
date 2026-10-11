@@ -9,8 +9,8 @@ unset($_SESSION['flash']);
 
 $keyword = trim($_GET['q'] ?? '');
 
-// Menambahkan p.tanggal_jatuh_tempo atau kalkulasi 14 hari
-$sqlDasar = "SELECT p.id, b.judul, a.nama, p.tanggal_pinjam,
+// Menambahkan a.no_hp pada query JOIN dari tabel anggota
+$sqlDasar = "SELECT p.id, b.judul, a.nama, a.no_hp, p.tanggal_pinjam,
                     COALESCE(p.tanggal_jatuh_tempo, p.tanggal_pinjam + INTERVAL '14 days')::date AS jatuh_tempo
              FROM peminjaman p
              JOIN buku b ON b.id = p.buku_id
@@ -18,7 +18,7 @@ $sqlDasar = "SELECT p.id, b.judul, a.nama, p.tanggal_pinjam,
              WHERE p.status = 'dipinjam'";
 
 if ($keyword !== '') {
-    $stmt = $pdo->prepare($sqlDasar . " AND (b.judul ILIKE :kw OR a.nama ILIKE :kw) ORDER BY p.tanggal_pinjam");
+    $stmt = $pdo->prepare($sqlDasar . " AND (b.judul ILIKE :kw OR a.nama ILIKE :kw OR a.no_hp ILIKE :kw) ORDER BY p.tanggal_pinjam");
     $stmt->execute(['kw' => '%' . $keyword . '%']);
 } else {
     $stmt = $pdo->query($sqlDasar . " ORDER BY p.tanggal_pinjam");
@@ -35,8 +35,8 @@ $daftarAktif = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="search-box">
                 <form method="get" action="kembali.php">
                     <span>
-                        <label for="search-input">Cari anggota/buku</label><br>
-                        <input type="text" id="search-input" name="q" value="<?php echo e($keyword); ?>" placeholder="Nama anggota atau judul buku...">
+                        <label for="search-input">Cari anggota/buku/no.hp</label><br>
+                        <input type="text" id="search-input" name="q" value="<?php echo e($keyword); ?>" placeholder="Nama, judul buku, atau No. HP...">
                     </span>
                     <button type="submit">Cari</button>
                 </form>
@@ -47,6 +47,7 @@ $daftarAktif = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead>
                     <tr>
                         <th>Anggota</th>
+                        <th>No. HP</th>
                         <th>Buku</th>
                         <th>Tgl Pinjam</th>
                         <th>Jatuh Tempo</th>
@@ -56,12 +57,13 @@ $daftarAktif = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php if (empty($daftarAktif)): ?>
                     <tr>
-                        <td colspan="5">Tidak ada peminjaman aktif.</td>
+                        <td colspan="6">Tidak ada peminjaman aktif.</td>
                     </tr>
                     <?php else: ?>
                         <?php foreach ($daftarAktif as $trx): ?>
                         <tr>
                             <td><?php echo e($trx['nama']); ?></td>
+                            <td><?php echo e($trx['no_hp'] ?? '-'); ?></td>
                             <td><?php echo e($trx['judul']); ?></td>
                             <td><?php echo $trx['tanggal_pinjam']; ?></td>
                             <td><?php echo $trx['jatuh_tempo']; ?></td>
