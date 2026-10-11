@@ -17,8 +17,21 @@ if ($anggotaId === '' || $bukuId === '') {
 try {
     $pdo->beginTransaction();
 
-    // Kunci baris buku (FOR UPDATE) agar stok tidak berubah oleh transaksi lain
-    // di tengah proses ini — mencegah stok menjadi negatif akibat race condition.
+    // 1. Validasi Bisnis: Cek apakah anggota memiliki peminjaman aktif yang terlambat > 14 hari
+    $cekTerlambat = $pdo->prepare("
+        SELECT COUNT(*) 
+        FROM peminjaman 
+        WHERE anggota_id = :anggota_id 
+          AND status = 'dipinjam' 
+          AND (CURRENT_DATE - tanggal_pinjam) > 14
+    ");
+    $cekTerlambat->execute(['anggota_id' => $anggotaId]);
+
+    if ($cekTerlambat->fetchColumn() > 0) {
+        throw new Exception('Anggota memiliki peminjaman yang terlambat lebih dari 14 hari.');
+    }
+
+    // 2. Kunci baris buku (FOR UPDATE) agar stok tidak berubah oleh transaksi lain
     $cek = $pdo->prepare("SELECT stok FROM buku WHERE id = :id FOR UPDATE");
     $cek->execute(['id' => $bukuId]);
     $buku = $cek->fetch(PDO::FETCH_ASSOC);
@@ -27,12 +40,14 @@ try {
         throw new Exception('Stok buku tidak tersedia.');
     }
 
+    // 3. Simpan transaksi peminjaman baru
     $insert = $pdo->prepare(
         "INSERT INTO peminjaman (buku_id, anggota_id, tanggal_pinjam, status)
          VALUES (:buku_id, :anggota_id, CURRENT_DATE, 'dipinjam')"
     );
     $insert->execute(['buku_id' => $bukuId, 'anggota_id' => $anggotaId]);
 
+    // 4. Update stok buku
     $update = $pdo->prepare("UPDATE buku SET stok = stok - 1 WHERE id = :id");
     $update->execute(['id' => $bukuId]);
 
@@ -42,8 +57,10 @@ try {
     header('Location: ../index.php');
     exit;
 } catch (Exception $e) {
-    $pdo->rollBack();
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Gagal mencatat peminjaman: ' . $e->getMessage()];
     header('Location: tambah.php');
     exit;
-}
+}   
