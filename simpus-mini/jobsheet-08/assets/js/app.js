@@ -177,7 +177,6 @@ async function muatDataTabel(urlJson, keys) {
 
             rowHtml += "<td>" +
                 "<button type=\"button\" class=\"btn-edit\">Edit</button> " +
-                "<button type=\"button\" class=\"btn-detail\">Detail</button> " +
                 "<button type=\"button\" class=\"btn-delete\">Hapus</button>" +
                 "</td>";
 
