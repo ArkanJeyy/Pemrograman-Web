@@ -62,7 +62,7 @@ $daftarAnggota = $_SESSION['anggota'] ?? [];
                             <td><?php echo htmlspecialchars($anggota['alamat'] ?? '-'); ?></td>
                             <td><?php echo htmlspecialchars($anggota['email'] ?? '-'); ?></td>
                             <td><?php echo htmlspecialchars($anggota['no_hp'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($anggota['tgl_bergabung'] ?? '-'); ?></td>
+                            <td><?php echo htmlspecialchars($anggota['tanggal_bergabung'] ?? '-'); ?></td>
                             <td>
                                 <a href="edit.php?id=<?php echo urlencode($anggota['no_anggota'] ?? $index); ?>">
                                     <button type="button" class="btn-edit">Edit</button>

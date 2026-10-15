@@ -64,7 +64,7 @@ $daftarAnggota = $pdo->query("SELECT * FROM anggota ORDER BY id DESC")->fetchAll
                             <td><?php echo htmlspecialchars($anggota['alamat'] ?? '-'); ?></td>
                             <td><?php echo htmlspecialchars($anggota['email'] ?? '-'); ?></td>
                             <td><?php echo htmlspecialchars($anggota['no_hp'] ?? '-'); ?></td>
-                            <td><?php echo htmlspecialchars($anggota['tgl_bergabung'] ?? '-'); ?></td>
+                            <td><?php echo htmlspecialchars($anggota['tanggal_bergabung'] ?? '-'); ?></td>
                             <td>
                                 <a href="edit.php?id=<?php echo urlencode($anggota['id']); ?>">
                                     <button type="button" class="btn-edit">Edit</button>
