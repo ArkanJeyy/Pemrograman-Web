@@ -2,8 +2,24 @@
 $page_title = "Beranda";
 include __DIR__ . '/includes/header.php';
 
-$totalBuku = count($_SESSION['buku'] ?? []);
-$totalAnggota = count($_SESSION['anggota'] ?? []);
+include __DIR__. '/includes/koneksi.php';
+
+try {
+    $stmtBuku = $pdo->query("SELECT COUNT(*) FROM buku");
+    $totalBuku = $stmtBuku->fetchColumn();
+} catch (Exception $e) {
+    $totalBuku = count($_SESSION['buku'] ?? []);
+}
+
+// Hitung total anggota dari database
+try {
+    $stmtAnggota = $pdo->query("SELECT COUNT(*) FROM anggota");
+    $totalAnggota = $stmtAnggota->fetchColumn();
+} catch (Exception $e) {
+    $totalAnggota = count($_SESSION['anggota'] ?? []);
+}
+
+// Untuk peminjaman dan terlambat, tetap ambil dari session atau query jika sudah ada tabelnya
 $sedangDipinjam = count($_SESSION['peminjaman'] ?? []);
 $bukuTerlambat = count($_SESSION['terlambat'] ?? []);
 ?>
