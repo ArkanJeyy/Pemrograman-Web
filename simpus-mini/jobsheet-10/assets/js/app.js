@@ -28,11 +28,20 @@ function updateCounter() {
 }
 
 // ===== Konfirmasi Hapus (Event Delegation dengan Log Debugging) =====
+// ===== Konfirmasi Hapus (Aman untuk Form POST PHP) =====
 function initHapusConfirm() {
     document.addEventListener("click", function (e) {
-        console.log("Elemen yang sedang diklik : ", e.target);
         const btn = e.target.closest(".btn-hapus, .btn-delete");
         if (!btn) return;
+
+        // Jika tombol hapus berada di dalam <form>, biarkan atribut onsubmit/submit form PHP bekerja
+        const form = btn.closest("form");
+        if (form) {
+            // Form akan ter-submit secara alami ke hapus.php
+            return; 
+        }
+
+        // Jika tombol hapus biasa (tanpa form/AJAX), baru hapus dari DOM
         const row = btn.closest("tr");
         const namaCell = row ? (row.cells[1] || row.querySelector("td")) : null;
         const nama = namaCell ? namaCell.textContent.trim() : "data ini";
