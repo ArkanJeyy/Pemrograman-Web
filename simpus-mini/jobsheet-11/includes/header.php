@@ -8,8 +8,7 @@ require_once __DIR__ . '/csrf.php';
 
 
 // Menerapkan Header Content-Security-Policy
-header("Content-Security-Policy: default-src 'self'; script-src 'self'; 
-style-src 'self' 'unsafe-inline'; img-src 'self' data:;");
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;");
 
 
 $sudahLogin = isset($_SESSION['user_id']);
