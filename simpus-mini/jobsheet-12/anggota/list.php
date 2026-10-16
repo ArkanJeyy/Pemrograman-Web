@@ -1,13 +1,13 @@
 <?php
 require __DIR__ . '/../includes/auth.php';
-$page_title = "Daftar Anggota";
-include __DIR__ . '/../includes/header.php';
 require __DIR__ . '/../includes/koneksi.php';
+
+$page_title = "Daftar Anggota";
 
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
-// Jumlah baris per halaman diset ke 10 sesuai instruksi tugas 2
+// Jumlah baris per halaman diset ke 10
 $perPage = 10;
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $offset = ($page - 1) * $perPage;
@@ -23,18 +23,26 @@ if ($keyword !== '') {
     ]);
     $totalRows = $hitung->fetchColumn();
 
-    $stmt = $pdo->prepare("SELECT * FROM anggota WHERE nama ILIKE :kw1 OR no_anggota::text ILIKE :kw2 ORDER BY id DESC LIMIT $perPage OFFSET $offset");
-    $stmt->execute([
-        'kw1' => $searchKw,
-        'kw2' => $searchKw
-    ]);
+    $stmt = $pdo->prepare("SELECT * FROM anggota WHERE nama ILIKE :kw1 OR no_anggota::text ILIKE :kw2 ORDER BY id DESC LIMIT :limit OFFSET :offset");
+    $stmt->bindValue(':kw1', $searchKw, PDO::PARAM_STR);
+    $stmt->bindValue(':kw2', $searchKw, PDO::PARAM_STR);
+    $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
 } else {
     $totalRows = $pdo->query("SELECT COUNT(*) FROM anggota")->fetchColumn();
-    $stmt = $pdo->query("SELECT * FROM anggota ORDER BY id DESC LIMIT $perPage OFFSET $offset");
+    
+    $stmt = $pdo->prepare("SELECT * FROM anggota ORDER BY id DESC LIMIT :limit OFFSET :offset");
+    $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
 }
 
 $daftarAnggota = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalPages = max(1, (int) ceil($totalRows / $perPage));
+
+// Panggil header setelah logika query selesai
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <section>
@@ -54,7 +62,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
             </span>
             <button type="submit">Cari</button>
             <?php if ($keyword !== ''): ?>
-                <a href="list.php"><button type="button">Muat Ulang</button></a>
+                <a href="list.php" style="display:inline-block; padding:0.55rem 1.2rem; background:#6c757d; color:#fff; border-radius:4px; text-decoration:none;">Muat Ulang</a>
             <?php endif; ?>
         </form>
     </div>
@@ -92,9 +100,8 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                 <form class="form-hapus" method="post" action="hapus.php" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus anggota ini?');">
                                     <?php echo csrf_field(); ?>
-                                    
                                     <input type="hidden" name="id" value="<?php echo e($anggota['id']); ?>">
-                                    <button type="submit" class="btn-hapus">Hapus</button>
+                                    <button type="submit" class="btn-delete">Hapus</button>
                                 </form>
                             <?php endif; ?>
                         </td>
